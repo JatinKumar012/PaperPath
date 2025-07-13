@@ -1,3 +1,11 @@
+body {
+    overflow-x: hidden;
+}
+
+html {
+    overflow-x: hidden;
+}
+
 .inputBox {
     background-color: #EAEAEA;
     display: flex;
@@ -18,10 +26,14 @@
 
 .inputBox i {
     font-size: 20px;
-    margin-right: 5px;
+    margin-right: 7px;
     margin-left: 5px;
 }
 
 .inputCon {
     margin-bottom: 20px;
+}
+
+.right {
+    width: calc(100% - 30%);
 }
