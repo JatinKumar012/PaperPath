@@ -5,21 +5,50 @@ import { IoEyeSharp } from "react-icons/io5";
 import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import rightIMG from "../images/signUpRight.png"
+import { api_base_url } from '../Helper';
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [pwd, setPwd] = useState("");
   const [error, setError] = useState("");
+
+  const createdUser = (e) => {
+    e.preventDefault();
+      fetch(api_base_url + "/signUp",  {
+        mode: "cors",
+        mrthod: "POST",
+        headers : {
+          "Content-Type" : "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          name : name,
+          email : email,
+          phone : phone,
+          password : pwd,
+        }),
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        if(data.success == false) {
+          setError(data.message);
+        } else{
+          navigate("/login");
+      }
+      })
+  } 
+
   return (
     <div className="flex overflow-hidden items-center w-screen justify-center flex-col h-screen bg-[#F0F0F0]">
       <div className="flex w-full items-center">
         <div className="left w-[30%] flex  flex-col ml-[100px]">
-          <img className='w-[210px]' src={logo} alt='' />
+          <img onSubmit={createdUser} className='w-[210px]' src={logo} alt='' />
           <form className='pl-3 mt-5' action="">
             <div className='inputCon'>
               <p className='text-[14px] text-[#808080]'>Username</p>
