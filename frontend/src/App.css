@@ -37,3 +37,19 @@ html {
 .right {
     width: calc(100% - 30%);
 }
+
+.btnBlue {
+    padding: 10px;
+    color: #ffffff;
+    min-width: 120px;
+    border-radius: 5px;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    background-color: #3882F6;
+    transition: all 0.3s ease;
+}
+
+.btnBlue:hover {
+    background-color: #1E40AF;
+}

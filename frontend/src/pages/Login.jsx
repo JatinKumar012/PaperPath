@@ -3,14 +3,41 @@ import logo from "../images/logo.png";
 import { IoEyeSharp } from "react-icons/io5";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import rightIMG from "../images/loginRight.png"
+import { api_base_url } from '../Helper';
 
 const Login = () => {
     // return <h1>Login page Working</h1>
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [error, setError] = useState("");
+
+  const login = (e) => {
+    e.preventDefault();
+    fetch(api_base_url + "/login",  {
+      mode:"cors",
+      method:"POST",
+      headers: {
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify( {
+        email : email,
+        password : pwd
+      })
+    }).then(res => res.json()).then(data => {
+      if(data.success === true){
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("isLoggenIn", true);
+        localStorage.setItem("userId", data.userId);
+        navigate("/");
+       
+      } else {
+        setError(data.message);
+      }
+    })
+  }
 
 
   return (
@@ -18,7 +45,7 @@ const Login = () => {
       <div className="flex w-full items-center">
         <div className="left w-[30%] flex  flex-col ml-[100px]">
           <img className='w-[210px]' src={logo} alt='' />
-          <form className='pl-3 mt-5' action="">
+          <form onSubmit={login} className='pl-3 mt-5' action="">
 
             <div className='inputCon'>
               <p className='text-[14px] text-[#808080]'>Email</p>
@@ -42,7 +69,7 @@ const Login = () => {
 
              <p className='text-red-500 text-[14px] my-2'>{error}</p>
             <p>Don't have an account <Link to="/signUp" className='text-blue-500'>SignUp</Link></p>
-            <button className='p-[10px] bg-green-500 transition-all hover:bg-green-600 text-white rounded-lg w-full border-0 mt-3'>Sign Up</button>
+            <button className='p-[10px] bg-green-500 transition-all hover:bg-green-600 text-white rounded-lg w-full border-0 mt-3'>Login</button>
 
           </form>
         </div>

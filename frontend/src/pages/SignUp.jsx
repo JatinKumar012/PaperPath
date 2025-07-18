@@ -11,7 +11,7 @@ import { api_base_url } from '../Helper';
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(""); 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -22,7 +22,7 @@ const SignUp = () => {
     e.preventDefault();
       fetch(api_base_url + "/signUp",  {
         mode: "cors",
-        mrthod: "POST",
+        method: "POST",
         headers : {
           "Content-Type" : "application/json",
         },
@@ -48,8 +48,8 @@ const SignUp = () => {
     <div className="flex overflow-hidden items-center w-screen justify-center flex-col h-screen bg-[#F0F0F0]">
       <div className="flex w-full items-center">
         <div className="left w-[30%] flex  flex-col ml-[100px]">
-          <img onSubmit={createdUser} className='w-[210px]' src={logo} alt='' />
-          <form className='pl-3 mt-5' action="">
+          <img  className='w-[210px]' src={logo} alt='' />
+          <form  onSubmit={createdUser} className='pl-3 mt-5' action="">
             <div className='inputCon'>
               <p className='text-[14px] text-[#808080]'>Username</p>
               <div className="inputBox w-[100%]">
@@ -95,7 +95,7 @@ const SignUp = () => {
 
              <p className='text-red-500 text-[14px] my-2'>{error}</p>
             <p>Already have an account <Link to="/login" className='text-blue-500'>Login</Link></p>
-            <button className='p-[10px] bg-green-500 transition-all hover:bg-green-600 text-white rounded-lg w-full border-0 mt-3'>Sign Up</button>
+            <button  type="submit" className='p-[10px] bg-green-500 transition-all hover:bg-green-600 text-white rounded-lg w-full border-0 mt-3'>Sign Up</button>
 
           </form>
         </div>

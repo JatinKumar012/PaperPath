@@ -2,6 +2,9 @@ var express = require('express');
 const userModel = require('../models/userModel');
 var router = express.Router();
 var bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
+
+const secret = "secret";
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -9,7 +12,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.post("/signUp", async (req, res) => {
-  let [username, name, email, phone, password] = req.body;
+  let {username, name, email, phone, password} = req.body;
   let emailCon = await userModel.findOne({ email: email });
   let phoneCon = await userModel.findOne({ phone: phone });
   if (emailCon) {
@@ -32,6 +35,25 @@ router.post("/signUp", async (req, res) => {
       });
     });
   }
+})
+
+router.post("/login", async(req, res) => {
+  let {email, password} = req.body;
+  let user = await userModel.findOne({email : email});
+  if(user) {
+    bcrypt.compare(password, user.password, function(err, result){
+      if(result) {
+        var token = jwt.sign({email:user.email, userId : user._id}, secret)
+        res.json({success:true, message:"Login successful", userId:user._id, token: token})
+      } else {
+        res.json({success:false, message:"Invalid password"})
+      }
+    });
+  }
+  else {
+    res.json({success:false, message:"Invalid email"});
+  }
+
 })
 
 module.exports = router;
