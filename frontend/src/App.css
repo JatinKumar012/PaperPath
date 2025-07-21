@@ -48,8 +48,16 @@ html {
     cursor: pointer;
     background-color: #3882F6;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 
 .btnBlue:hover {
     background-color: #1E40AF;
+}
+
+.btnBlue i {
+    font-size: 20px;
 }
