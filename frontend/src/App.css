@@ -61,3 +61,7 @@ html {
 .btnBlue i {
     font-size: 20px;
 }
+ 
+.jodit-wysiwyg { 
+    min-height: calc(100vh - 250px) !important;
+}
