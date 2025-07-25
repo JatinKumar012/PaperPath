@@ -1,19 +1,57 @@
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import Navbar from '../components/Navbar'
 import { GoPlus } from "react-icons/go";
 import Docs from '../components/Docs';
 import { FaSearch } from "react-icons/fa";
+import {useNavigate } from "react-router-dom";
+import { api_base_url } from '../Helper';
 
 
 const Home = () => {
   const [isCreateModelShow, setIsCreateModelShow] = useState(false);
   
+  const [title, setTitle] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const createDoc = () => {
+    if(title === ""){
+      setError("Please enter title");
+    }
+    else {
+      fetch(api_base_url + "/createDoc", {
+        mode:"cors",
+        method:"POST",
+        headers: {
+          "Content-Type" : "applications/json",
+          // "Authorization" : "Bearer" + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+          title: title,
+        userId: localStorage.getItem("userId")
+        })
+      }).then(res => res.json()).then(data => {
+        if(data.success){
+          setIsCreateModelShow(false);
+          navigate(`/createDocs/${data.docId}`); 
+        }
+        else{
+          setError(data.message);
+        }
+      })
+     }
+  }
   return (
     <>
       <Navbar />
       <div className="flex items-center justify-between px-[100px]">
         <h3 className='mt-7 mb-3 text-3xl'>All Documents</h3>
-        <button className="btnBlue" onClick={() => { setIsCreateModelShow(true) }}> <i><GoPlus /></i>Create New Document</button>
+        <button className="btnBlue" onClick={() => { 
+          setIsCreateModelShow(true);
+          document.getElementById('title').focus();
+
+          }}> <i><GoPlus /></i>Create New Document</button>
       </div>
 
       <div className='allDocs px-[100px] mt-4'>
@@ -34,11 +72,11 @@ const Home = () => {
                   <p className='text-[14px] text-[#808080]'>Title</p>
                   <div className="inputBox w-[100%]">
                     <i><FaSearch /></i>
-                    <input type='text' placeholder='Title' id='title' name='title' required />
+                    <input onChange={(e)=>{setTitle(e.target.value)}} value={title} type='text' placeholder='Title' id='title' name='title' required />
                   </div>
                 </div>
                 <div className="flex items-center gap-2 justify-between w-full">
-                  <button className='btnBlue !min-w-[49%]'>Create New Document</button>
+                  <button onClick={createDoc} className='btnBlue !min-w-[49%]'>Create New Document</button>
                   <button onClick={() => { setIsCreateModelShow(false) }} className='p-[10px] bg-[#D1D5DB] text-black rounded-lg border-0 cursor-pointer min-w-[48%]'>Cancel</button>
                 </div>
               </div>

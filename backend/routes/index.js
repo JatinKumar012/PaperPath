@@ -3,6 +3,7 @@ const userModel = require('../models/userModel');
 var router = express.Router();
 var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
+var docModel = require("../models/docModel")
 
 const secret = "secret";
 
@@ -54,6 +55,21 @@ router.post("/login", async(req, res) => {
     res.json({success:false, message:"Invalid email"});
   }
 
+})
+
+router.post("/createDoc", async (req, res) => {
+  let {userId, docName} = req.body;
+  let user = userModel.findById(userId);
+  if(user) {
+    let doc = await docModel.create({
+      userId:userId,
+      docName:docName
+    })
+    return res.json({success:true, message:"Document created successfully", docId:doc._id});
+  }
+  else {
+    return res.json({success:false, message:"Invalid user"});
+  }
 })
 
 

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+mongoose.connect("mongodb://127.0.0.1:27017/paper");
+
 const docSchema = mongoose.Schema({
     title : String,
     content : String,
@@ -12,4 +14,6 @@ const docSchema = mongoose.Schema({
         type : Date,
         default : Date.now
     }
-})
+});
+
+module.exports = mongoose.model('Document', docSchema);
