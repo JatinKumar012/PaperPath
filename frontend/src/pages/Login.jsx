@@ -29,10 +29,11 @@ const Login = () => {
     }).then(res => res.json()).then(data => {
       if(data.success === true){
         localStorage.setItem("token", data.token);
-        localStorage.setItem("isLoggenIn", true);
+        localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("userId", data.userId);
+       setTimeout(() => {
         navigate("/");
-       
+       }, 100);
       } else {
         setError(data.message);
       }

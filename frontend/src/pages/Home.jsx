@@ -60,6 +60,9 @@ const Home = () => {
     })
   };
 
+
+
+
    useEffect(() => {
      getData();
    }, [])
@@ -83,7 +86,7 @@ const Home = () => {
         data ? data.map((el, index) => {
           return(
             <>
-            <Docs docs={el} docID={`doc-${index + 1}`} />
+            <Docs docs={el} docID={`doc-${index + 1}`}/>
             </>
           )
         }) : ""

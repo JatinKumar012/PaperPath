@@ -3,13 +3,17 @@ import docsIcon from '../images/docsIcon.png';
 import { MdDelete } from "react-icons/md";
 import deleteImg from "../images/delete.png";
 import { api_base_url } from '../Helper';
+import { useNavigate } from 'react-router-dom';
+
 
 const Docs = ({ docs, onDelete }) => {
   const [error, setError] = useState("");
   const [isDeleteModelShow, setIsDeleteModelShow] = useState(false);
 
+  const navigate = useNavigate();
+
   const deleteDoc = (id) => {
-    fetch(api_base_url + "/delete", {
+    fetch(api_base_url + "/deleteDoc", {
       mode: "cors",
       method: "POST",
       headers: {
@@ -25,8 +29,10 @@ const Docs = ({ docs, onDelete }) => {
       if (!data.success) {
         setError(data.message);
       } else {
-        alert(data.message);
         setIsDeleteModelShow(false);
+        setTimeout(() => {
+          alert(data.message);
+        }, 100);
         onDelete(id); // Update parent component (UI)
       }
     })
@@ -34,11 +40,11 @@ const Docs = ({ docs, onDelete }) => {
       setError("Something went wrong while deleting.");
     });
   };
-
+ 
   return (
     <>
       <div id={docs._id} className='docs cursor-pointer rounded-lg flex items-center mt-3 justify-between p-[10px] bg-[#F0F0F0] transition-all hover:bg-[#DCDCDC]'>
-        <div className="left flex items-center gap-2">
+        <div onClick={() => {navigate(`/createDocs/${docs._id}`)}} className="left flex items-center gap-2">
           <img src={docsIcon} alt="doc-icon" />
           <div>
             <h3 className='text-[20px]'>{docs.title}</h3>

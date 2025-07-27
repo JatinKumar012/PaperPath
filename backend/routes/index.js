@@ -103,7 +103,7 @@ router.post("deleteDoc", async (req, res) => {
   let {userId, docId} = req.body;
   let user = await userModel.findById(userId);
   if(user){
-    let doc = await docModel.findByIdAndUpdate(docId);
+    let doc = await docModel.findByIdAndDelete(docId);
     return res.json({success:true, message:"Document deleted successfully"});
   } 
   else {
@@ -120,6 +120,28 @@ router.post("/getAllDocs", async (req, res) => {
   }
   else{
     return res.json({success:false, message:"Invalid user"});
+  }
+});
+
+router.post("/getUser", async (req, res) => {
+  let {userId} = req.body;
+  let user = await userModel.findById(userId);
+  if(user){
+    return res.json({success:true, message:"User fetched successfully", user:user});
+  }
+  else {
+    return res.json({success:false, message:"Invalid user"});
+  }
+});
+
+router.post("/logout", async (req, res) => {
+  let {userId} = req.body;
+  let user = await userModel.findById(userId);
+  if(user) {
+    return res.json({success:true, message:"User logged out successfully"});
+  }
+  else {
+    return res.json({success:false, message:"Invalid user"})
   }
 })
 
