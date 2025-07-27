@@ -4,7 +4,10 @@ mongoose.connect("mongodb://127.0.0.1:27017/paper");
 
 const docSchema = mongoose.Schema({
     title : String,
-    content : String,
+    content : {
+        type:String,
+        default:""
+    },
     uploadedBy : String,
     date : {
         type : Date,

@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState, useEffect} from 'react'
 import Navbar from '../components/Navbar'
 import { GoPlus } from "react-icons/go";
 import Docs from '../components/Docs';
@@ -13,6 +13,8 @@ const Home = () => {
   const [title, setTitle] = useState("");
   const [error, setError] = useState("");
 
+  const [data, setData] = useState(null);
+
   const navigate = useNavigate();
 
   const createDoc = () => {
@@ -24,12 +26,12 @@ const Home = () => {
         mode:"cors",
         method:"POST",
         headers: {
-          "Content-Type" : "applications/json",
+          "Content-Type" : "application/json",
           // "Authorization" : "Bearer" + localStorage.getItem("token")
         },
         body: JSON.stringify({
-          title: title,
-        userId: localStorage.getItem("userId")
+          docName: title,
+          userId: localStorage.getItem("userId")
         })
       }).then(res => res.json()).then(data => {
         if(data.success){
@@ -42,6 +44,28 @@ const Home = () => {
       })
      }
   }
+
+  const getData = () => {
+    fetch(api_base_url + "/getAllDocs",  {
+      mode:"cors",
+      method:"POST",
+      headers:{
+        "Content-Type" : "application/json",
+      },
+      body: JSON.stringify({
+        userId:localStorage.getItem("userId")
+      })
+    }).then(res => res.json()).then(data => {
+      setData(data.docs);
+    })
+  };
+
+   useEffect(() => {
+     getData();
+   }, [])
+   
+     
+
   return (
     <>
       <Navbar />
@@ -55,11 +79,15 @@ const Home = () => {
       </div>
 
       <div className='allDocs px-[100px] mt-4'>
-        <Docs />
-        <Docs />
-        <Docs />
-        <Docs />
-        <Docs />
+       {
+        data ? data.map((el, index) => {
+          return(
+            <>
+            <Docs docs={el} docID={`doc-${index + 1}`} />
+            </>
+          )
+        }) : ""
+       }
       </div>
 
       {
